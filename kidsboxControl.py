@@ -95,8 +95,10 @@ def read_playlist_loop():
             print "playlist {0} not started".format(title)
             soundControl.play_fault_sound()
 
+
 def shutdown():
     call("sudo shutdown -h now", shell=True)
+
 
 add_button_detect()
 mpdClient.wait_for_server_connection()  # do not, cause now it is set by mopidy audio
