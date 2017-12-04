@@ -45,6 +45,23 @@ def start_stop_button_pressed(channel):
         on_start_stop_button_release()
 
 
+def on_start_stop_button_pressed():
+    global start_start_button_press
+    start_start_button_press = time.time()
+    # always toggle on falling (it the default command need to interpret directly)
+    mpdClient.play_pause_toggle()
+
+
+def on_start_stop_button_release():
+    global start_start_button_press
+    if start_start_button_press is not None:
+        start_start_button_press = None
+        elapsed_in_s = time.time() - start_start_button_press
+        print "StartButton release after {0} sec".format(elapsed_in_s)
+        if (elapsed_in_s >= 3) or (elapsed_in_s < 10):  # after 10 seconds ignore again, cause fault
+            shutdown()
+
+
 def next_button_pressed(channel):
     mpdClient.next_title()
 
@@ -78,27 +95,8 @@ def read_playlist_loop():
             print "playlist {0} not started".format(title)
             soundControl.play_fault_sound()
 
-
-def on_start_stop_button_pressed():
-    global start_start_button_press
-    start_start_button_press = time.time()
-    # always toggle on falling (it the default command need to interpret directly)
-    mpdClient.play_pause_toggle()
-
-
-def on_start_stop_button_release():
-    global start_start_button_press
-    if start_start_button_press is not None:
-        start_start_button_press = None
-        elapsed_in_s = time.time() - start_start_button_press
-        print "StartButton release after {0} sec".format(elapsed_in_s)
-        if (elapsed_in_s >= 3) or (elapsed_in_s < 10):  # after 10 seconds ignore again, cause fault
-            shutdown()
-
-
 def shutdown():
     call("sudo shutdown -h now", shell=True)
-
 
 add_button_detect()
 mpdClient.wait_for_server_connection()  # do not, cause now it is set by mopidy audio
