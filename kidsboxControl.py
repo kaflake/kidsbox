@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*
 
 import RPi.GPIO as GPIO
+import time
+from subprocess import call
 import mpdClient
 import playlistInterpreter
 import soundControl
@@ -9,42 +11,53 @@ import soundControl
 # Warnungen ausschalten
 # GPIO.setwarnings(False)
 
+start_stop_button = 13
+next_button = 15
+previous_button = 16
+volume_up_button = 18
+volume_down_button = 19
+
+start_start_button_press = None
+
 # Pin Nummern verwenden
 GPIO.setmode(GPIO.BOARD)
 # Pin 11 als Input
-GPIO.setup(13, GPIO.IN)
-GPIO.setup(15, GPIO.IN)
-GPIO.setup(16, GPIO.IN)
-GPIO.setup(18, GPIO.IN)
-GPIO.setup(19, GPIO.IN)
+GPIO.setup(start_stop_button, GPIO.IN)
+GPIO.setup(next_button, GPIO.IN)
+GPIO.setup(previous_button, GPIO.IN)
+GPIO.setup(volume_up_button, GPIO.IN)
+GPIO.setup(volume_down_button, GPIO.IN)
 # GPIO.setup(33, GPIO.OUT) #debug output to show if its boot
 
-
+# there is a hardware pullup -> listen on falling is first event
 def add_button_detect():
-    GPIO.add_event_detect(13, GPIO.FALLING, callback=button_1_pressed, bouncetime=20)
-    GPIO.add_event_detect(15, GPIO.FALLING, callback=button_2_pressed, bouncetime=20)
-    GPIO.add_event_detect(16, GPIO.FALLING, callback=button_3_pressed, bouncetime=20)
-    GPIO.add_event_detect(18, GPIO.FALLING, callback=button_4_pressed, bouncetime=20)
-    GPIO.add_event_detect(19, GPIO.FALLING, callback=button_5_pressed, bouncetime=20)
+    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_button_pressed, bouncetime=200)
+    GPIO.add_event_detect(next_button, GPIO.FALLING, callback=next_button_pressed, bouncetime=200)
+    GPIO.add_event_detect(previous_button, GPIO.FALLING, callback=previous_button_pressed, bouncetime=200)
+    GPIO.add_event_detect(volume_up_button, GPIO.FALLING, callback=volume_up_pressed, bouncetime=200)
+    GPIO.add_event_detect(volume_down_button, GPIO.FALLING, callback=volume_down_pressed, bouncetime=200)
 
 
-def button_1_pressed(channel):
-    mpdClient.play_pause_toggle()
+def start_stop_button_pressed(channel):
+    if GPIO.input(start_stop_button) == 0:
+        on_start_stop_button_pressed()
+    if GPIO.input(start_stop_button) == 1:
+        on_start_stop_button_release()
 
 
-def button_2_pressed(channel):
+def next_button_pressed(channel):
     mpdClient.next_title()
 
 
-def button_3_pressed(channel):
+def previous_button_pressed(channel):
     mpdClient.previous_title()
 
 
-def button_4_pressed(channel):
+def volume_up_pressed(channel):
     mpdClient.volume_up()
 
 
-def button_5_pressed(channel):
+def volume_down_pressed(channel):
     mpdClient.volume_down()
 
 
@@ -64,6 +77,27 @@ def read_playlist_loop():
         else:
             print "playlist {0} not started".format(title)
             soundControl.play_fault_sound()
+
+
+def on_start_stop_button_pressed():
+    global start_start_button_press
+    start_start_button_press = time.time()
+    # always toggle on falling (it the default command need to interpret directly)
+    mpdClient.play_pause_toggle()
+
+
+def on_start_stop_button_release():
+    global start_start_button_press
+    if start_start_button_press is not None:
+        start_start_button_press = None
+        elapsed_in_s = time.time() - start_start_button_press
+        print "StartButton release after {0} sec".format(elapsed_in_s)
+        if (elapsed_in_s >= 3) or (elapsed_in_s < 10):  # after 10 seconds ignore again, cause fault
+            shutdown()
+
+
+def shutdown():
+    call("sudo shutdown -h now", shell=True)
 
 
 add_button_detect()
