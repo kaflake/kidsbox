@@ -31,14 +31,14 @@ GPIO.setup(volume_down_button, GPIO.IN)
 
 # there is a hardware pullup -> listen on falling is first event
 def add_button_detect():
-    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_button_pressed, bouncetime=200)
-    GPIO.add_event_detect(next_button, GPIO.FALLING, callback=next_button_pressed, bouncetime=200)
-    GPIO.add_event_detect(previous_button, GPIO.FALLING, callback=previous_button_pressed, bouncetime=200)
+    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_toggle, bouncetime=200)
+    GPIO.add_event_detect(next_button, GPIO.FALLING, callback=next_pressed, bouncetime=200)
+    GPIO.add_event_detect(previous_button, GPIO.FALLING, callback=previous_pressed, bouncetime=200)
     GPIO.add_event_detect(volume_up_button, GPIO.FALLING, callback=volume_up_pressed, bouncetime=200)
     GPIO.add_event_detect(volume_down_button, GPIO.FALLING, callback=volume_down_pressed, bouncetime=200)
 
 
-def start_stop_button_pressed(channel):
+def start_stop_toggle(channel):
     if GPIO.input(start_stop_button) == 0:
         on_start_stop_button_pressed()
     if GPIO.input(start_stop_button) == 1:
@@ -62,11 +62,11 @@ def on_start_stop_button_release():
             shutdown()
 
 
-def next_button_pressed(channel):
+def next_pressed(channel):
     mpdClient.next_title()
 
 
-def previous_button_pressed(channel):
+def previous_pressed(channel):
     mpdClient.previous_title()
 
 
