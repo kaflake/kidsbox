@@ -3,7 +3,8 @@
 
 import RPi.GPIO as GPIO
 import time
-from subprocess import call
+import subprocess
+import shlex
 import mpdClient
 import playlistInterpreter
 import soundControl
@@ -97,7 +98,8 @@ def read_playlist_loop():
 
 
 def shutdown():
-    call("sudo shutdown -h now", shell=True)
+    cmd = shlex.split("sudo shutdown -h now")
+    subprocess.call(cmd, shell=True)
 
 
 add_button_detect()
