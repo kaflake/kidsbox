@@ -55,10 +55,10 @@ def on_start_stop_button_pressed():
 def on_start_stop_button_release():
     global start_start_button_press
     if start_start_button_press is not None:
-        start_start_button_press = None
         elapsed_in_s = time.time() - start_start_button_press
+        start_start_button_press = None
         print "StartButton release after {0} sec".format(elapsed_in_s)
-        if (elapsed_in_s >= 3) or (elapsed_in_s < 10):  # after 10 seconds ignore again, cause fault
+        if (elapsed_in_s >= 3) and (elapsed_in_s < 10):  # after 10 seconds ignore again, cause fault
             shutdown()
 
 
