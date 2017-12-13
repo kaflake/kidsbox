@@ -30,15 +30,21 @@ GPIO.setup(volume_up_button, GPIO.IN)
 GPIO.setup(volume_down_button, GPIO.IN)
 # GPIO.setup(33, GPIO.OUT) #debug output to show if its boot
 
+
 # there is a hardware pullup -> listen on falling is first event
 def add_button_detect():
-    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_toggle, bouncetime=200)
+    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_pressed, bouncetime=200)
     GPIO.add_event_detect(next_button, GPIO.FALLING, callback=next_pressed, bouncetime=200)
     GPIO.add_event_detect(previous_button, GPIO.FALLING, callback=previous_pressed, bouncetime=200)
     GPIO.add_event_detect(volume_up_button, GPIO.FALLING, callback=volume_up_pressed, bouncetime=200)
     GPIO.add_event_detect(volume_down_button, GPIO.FALLING, callback=volume_down_pressed, bouncetime=200)
 
 
+def start_stop_pressed(channel):
+    mpdClient.play_pause_toggle()
+
+
+#atm do not use this
 def start_stop_toggle(channel):
     if GPIO.input(start_stop_button) == 0:
         on_start_stop_button_pressed()
