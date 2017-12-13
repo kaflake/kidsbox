@@ -8,12 +8,6 @@ import id3reader
 
 playlist_path_prefix = "./music/"
 
-# mainfolder = r"C:\Users\DENAGFEL\Desktop\p\sort\mu".decode('utf8')
-# folder = r"C:\Users\DENAGFEL\Desktop\p\sort\Dann traut Euch - 7 klingende Hochzeitsgrüße".decode('utf8')
-# os.chdir(folder)
-
-# dirnames = os.walk(mainfolder).next()[1]
-# print dirnames
 
 def get_track(music_file):
     id3r = id3reader.Reader(music_file)
@@ -32,12 +26,18 @@ def get_playlist_file_name(actual_dir):
     return actual_dir + ".m3u"
 
 
-actual_dir = get_actual_dir_name()
-f = file(get_playlist_file_name(actual_dir), "w")
+dirnames = os.walk(".".decode('utf8')).next()[1]
+for dirname in dirnames:
+    playlist_name = dirname
+    print "playlistname: " + playlist_name
+    f = file(get_playlist_file_name(playlist_name), "w")
+    playlist_dir_mp3 = ".\\" + dirname + "\\*.mp3"
+    print playlist_dir_mp3
+    for music_file in sorted(glob.glob(playlist_dir_mp3), key=get_track):
+        print music_file
+        music_file_path = playlist_path_prefix + playlist_name + "/" + os.path.basename(music_file)
+        print music_file_path
+        f.writelines(music_file_path.encode('utf8') + "\n")
 
-for music_file in sorted(glob.glob("*.mp3"), key=get_track):
-    music_file_path = playlist_path_prefix + actual_dir + "/" + music_file
-    f.writelines(music_file_path + "\n")
-
-f.close()
+    f.close()
 
