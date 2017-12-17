@@ -8,5 +8,5 @@ playlist_dictionary = {
     "0005432684": "Rolfs Liederkalender - Die Jahresuhr",
     "0005524439": "Giraffenaffen",
     "0005313519": "Giraffenaffen 2",
-    "0005585695": "Die 30 besten Kirchenlieder für Kinder"
+    "0005585695": "Die 30 besten Kirchenlieder"
 }
