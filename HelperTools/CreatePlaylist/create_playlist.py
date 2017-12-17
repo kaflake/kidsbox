@@ -6,7 +6,7 @@ import os
 
 import id3reader
 
-playlist_path_prefix = "./music/"
+playlist_path_prefix = ""
 
 
 def get_track(music_file):
