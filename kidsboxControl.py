@@ -13,8 +13,8 @@ import soundControl
 # GPIO.setwarnings(False)
 
 start_stop_button = 13
-next_button = 15
-previous_button = 16
+next_button = 16
+previous_button = 15
 volume_up_button = 18
 volume_down_button = 19
 
