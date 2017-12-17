@@ -11,7 +11,7 @@ playlist_path_prefix = "./music/"
 
 def get_track(music_file):
     id3r = id3reader.Reader(music_file)
-    track = id3r.getValue('track')
+    track = int(id3r.getValue('track'))
     return track
 
 
