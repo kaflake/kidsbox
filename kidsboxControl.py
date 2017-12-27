@@ -33,11 +33,11 @@ GPIO.setup(volume_down_button, GPIO.IN)
 
 # there is a hardware pullup -> listen on falling is first event
 def add_button_detect():
-    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_pressed, bouncetime=200)
-    GPIO.add_event_detect(next_button, GPIO.FALLING, callback=next_pressed, bouncetime=200)
-    GPIO.add_event_detect(previous_button, GPIO.FALLING, callback=previous_pressed, bouncetime=200)
-    GPIO.add_event_detect(volume_up_button, GPIO.FALLING, callback=volume_up_pressed, bouncetime=200)
-    GPIO.add_event_detect(volume_down_button, GPIO.FALLING, callback=volume_down_pressed, bouncetime=200)
+    GPIO.add_event_detect(start_stop_button, GPIO.BOTH, callback=start_stop_pressed, bouncetime=300)
+    GPIO.add_event_detect(next_button, GPIO.FALLING, callback=next_pressed, bouncetime=300)
+    GPIO.add_event_detect(previous_button, GPIO.FALLING, callback=previous_pressed, bouncetime=300)
+    GPIO.add_event_detect(volume_up_button, GPIO.FALLING, callback=volume_up_pressed, bouncetime=300)
+    GPIO.add_event_detect(volume_down_button, GPIO.FALLING, callback=volume_down_pressed, bouncetime=300)
 
 
 def start_stop_pressed(channel):
