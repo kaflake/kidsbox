@@ -27,14 +27,14 @@ def get_playlist_file_name(actual_dir):
 
 
 def get_music_file_path(music_file, playlist_name):
-    return (playlist_path_prefix + playlist_name + "/" + os.path.basename(music_file)).encode('utf8') # linux path
+    return (playlist_path_prefix + playlist_name + "/" + os.path.basename(music_file)).encode('latin')  # linux path
 
 
 def create_playlist(dir_name):
     playlist_name = dir_name
     f = file(get_playlist_file_name(playlist_name), "w")
     playlist_files_pattern = ".\\" + playlist_name + "\\*.mp3"  # windows path
-    for music_file in sorted(glob.glob(playlist_files_pattern), key=get_track): # sort by track
+    for music_file in sorted(glob.glob(playlist_files_pattern), key=get_track):  # sort by track
         music_file_path = get_music_file_path(music_file, playlist_name)
         f.writelines(music_file_path + "\n")
     f.close()

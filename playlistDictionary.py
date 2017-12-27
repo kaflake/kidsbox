@@ -12,5 +12,6 @@ playlist_dictionary = {
     "0005469800": "Giraffenaffen 3",
     "0005585688": "Unter Meinem Bett",
     "0005585919": "Unter Meinem Bett 2",
-    "0005313686": "Unter Meinem Bett 3"
+    "0005313686": "Unter Meinem Bett 3",
+    "0005823583": "Für immer KSC"
 }
