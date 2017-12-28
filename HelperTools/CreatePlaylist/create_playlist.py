@@ -3,6 +3,7 @@
 
 import glob
 import os
+import sys
 
 import id3reader
 
@@ -42,5 +43,7 @@ def create_playlist(dir_name):
 
 dir_names = os.walk(".".decode('utf8')).next()[1]
 for dir_name in dir_names:
-    create_playlist(dir_name)
-
+    try:
+        create_playlist(dir_name)
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
